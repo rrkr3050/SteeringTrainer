@@ -15,6 +15,28 @@
         <!-- 左ペイン: コントロール & 判定 -->
         <ScrollViewer Grid.Column="0" Margin="0,0,12,0" VerticalScrollBarVisibility="Auto">
             <StackPanel>
+                <TextBlock Text="ブレーキを保ち、アクセルを合わせよう" Style="{StaticResource HeaderText}" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                <TextBlock Text="目標のブレーキ量を維持しながら、アクセルを目標まで踏みます。" Style="{StaticResource BaseText}" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="10回連続チャレンジ" Style="{StaticResource PrimaryButton}"
+                                    Command="{Binding StartChallengeCommand}" Margin="0,0,4,0"
+                                    IsEnabled="{Binding IsRunning, Converter={x:Static converters:BoolInverterConverter.Instance}}"/>
+                            <Button Grid.Column="1" Content="フリー練習" Style="{StaticResource SecondaryButton}"
+                                    Command="{Binding StartFreeCommand}" Margin="4,0,0,0"
+                                    IsEnabled="{Binding IsRunning, Converter={x:Static converters:BoolInverterConverter.Instance}}"/>
+                        </Grid>
+                        <Button Content="停止" Style="{StaticResource SecondaryButton}" Command="{Binding StopCommand}"/>
+                        <Button Content="{Binding StartBrakeHoldButtonText}" Style="{StaticResource SecondaryButton}"
+                                Command="{Binding StartBrakeHoldCommand}" Margin="0,8,0,0"/>
+                        <TextBlock Text="{Binding HoldProgressText}" Style="{StaticResource LabelText}"
+                                   Foreground="Cyan" TextWrapping="Wrap" Margin="0,6,0,0"/>
+                        <TextBlock Text="{Binding HoldResultText}" Style="{StaticResource BaseText}" Foreground="Cyan"
+                                   TextWrapping="Wrap" Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
                 <!-- リアルタイム判定ヘッドライン -->
                 <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
                     <StackPanel>
@@ -45,7 +67,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Brake安定性" Style="{StaticResource LabelText}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="ブレーキ安定性" Style="{StaticResource LabelText}" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{Binding StabilityScoreText}" Style="{StaticResource BaseText}" FontWeight="Bold" Foreground="OrangeRed" HorizontalAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1">
@@ -65,11 +87,11 @@
                 <!-- ペダル現在値 (BRAKE & THROTTLE ゲージ) -->
                 <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
                     <StackPanel>
-                        <TextBlock Text="PEDAL INPUTS" Style="{StaticResource HeaderText}" Margin="0,0,0,10"/>
+                        <TextBlock Text="現在のペダル入力" Style="{StaticResource HeaderText}" Margin="0,0,0,10"/>
 
                         <!-- BRAKE -->
                         <Grid Margin="0,0,0,4">
-                            <TextBlock Text="BRAKE" Style="{StaticResource LabelText}" FontWeight="Bold" Foreground="OrangeRed" HorizontalAlignment="Left"/>
+                            <TextBlock Text="ブレーキ" Style="{StaticResource LabelText}" FontWeight="Bold" Foreground="OrangeRed" HorizontalAlignment="Left"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <TextBlock Text="目標: " Style="{StaticResource LabelText}"/>
                                 <TextBlock Text="{Binding TargetBrakeText}" Style="{StaticResource BaseText}" FontWeight="Bold" Foreground="Yellow" Margin="0,0,8,0"/>
@@ -85,7 +107,7 @@
 
                         <!-- THROTTLE -->
                         <Grid Margin="0,0,0,4">
-                            <TextBlock Text="THROTTLE" Style="{StaticResource LabelText}" FontWeight="Bold" Foreground="LimeGreen" HorizontalAlignment="Left"/>
+                            <TextBlock Text="アクセル" Style="{StaticResource LabelText}" FontWeight="Bold" Foreground="LimeGreen" HorizontalAlignment="Left"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <TextBlock Text="目標: " Style="{StaticResource LabelText}"/>
                                 <TextBlock Text="{Binding TargetThrottleText}" Style="{StaticResource BaseText}" FontWeight="Bold" Foreground="Yellow" Margin="0,0,8,0"/>
@@ -102,11 +124,11 @@
                 </Border>
 
                 <!-- 設定 & ゲームモード -->
-                <Expander Header="HEEL &amp; TOE TRAINING SETTINGS" IsExpanded="False" Foreground="{StaticResource TextPrimaryBrush}"
+                <Expander Header="練習の設定" IsExpanded="False" Foreground="{StaticResource TextPrimaryBrush}"
                           Background="{StaticResource SurfaceBrush}" Margin="0,0,0,12" Padding="8">
                 <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="8">
                     <StackPanel>
-                        <TextBlock Text="TRAINING SETTINGS" Style="{StaticResource HeaderText}" Margin="0,0,0,8"/>
+                        <TextBlock Text="練習の設定" Style="{StaticResource HeaderText}" Margin="0,0,0,8"/>
 
                         <TextBlock Text="目標ブレーキ量" Style="{StaticResource LabelText}"/>
                         <DockPanel Margin="0,2,0,0">
@@ -203,26 +225,7 @@
                 </Border>
                 </Expander>
 
-                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
-                    <StackPanel>
-                        <Grid Margin="0,0,0,6">
-                            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="10回連続チャレンジ" Style="{StaticResource PrimaryButton}"
-                                    Command="{Binding StartChallengeCommand}" Margin="0,0,4,0"
-                                    IsEnabled="{Binding IsRunning, Converter={x:Static converters:BoolInverterConverter.Instance}}"/>
-                            <Button Grid.Column="1" Content="フリー練習" Style="{StaticResource SecondaryButton}"
-                                    Command="{Binding StartFreeCommand}" Margin="4,0,0,0"
-                                    IsEnabled="{Binding IsRunning, Converter={x:Static converters:BoolInverterConverter.Instance}}"/>
-                        </Grid>
-                        <Button Content="STOP" Style="{StaticResource SecondaryButton}" Command="{Binding StopCommand}"/>
-                        <Button Content="{Binding StartBrakeHoldButtonText}" Style="{StaticResource SecondaryButton}"
-                                Command="{Binding StartBrakeHoldCommand}" Margin="0,8,0,0"/>
-                        <TextBlock Text="{Binding HoldProgressText}" Style="{StaticResource LabelText}"
-                                   Foreground="Cyan" TextWrapping="Wrap" Margin="0,6,0,0"/>
-                        <TextBlock Text="{Binding HoldResultText}" Style="{StaticResource BaseText}" Foreground="Cyan"
-                                   TextWrapping="Wrap" Margin="0,6,0,0"/>
-                    </StackPanel>
-                </Border>
+
 
                 <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="12" Margin="0,0,0,12">
                     <StackPanel>
@@ -242,7 +245,7 @@
                                         <TextBlock Text="{Binding TargetText}" Style="{StaticResource BaseText}"/>
                                         <TextBlock Grid.Column="1" Text="{Binding Attempts}" Style="{StaticResource BaseText}"/>
                                         <TextBlock Grid.Column="2" Text="{Binding AverageScoreText}" Style="{StaticResource BaseText}"/>
-                                        <TextBlock Grid.Column="3" Text="{Binding AverageBrakeStabilityText}" Style="{StaticResource BaseText}" FontSize="11"/>
+                                        <TextBlock Grid.Column="3" Text="{Binding AverageBrakeStabilityText}" Style="{StaticResource BaseText}" FontSize="13"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -253,11 +256,11 @@
                 <!-- 失敗診断 & 改善ポイント -->
                 <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
                     <StackPanel>
-                        <TextBlock Text="DIAGNOSTICS &amp; RESULTS" Style="{StaticResource HeaderText}" Margin="0,0,0,8"/>
+                        <TextBlock Text="結果と改善ポイント" Style="{StaticResource HeaderText}" Margin="0,0,0,8"/>
                         <TextBlock Text="{Binding FailureDiagnostics}" Style="{StaticResource BaseText}"
-                                   Foreground="Orange" TextWrapping="Wrap" FontSize="12" Margin="0,0,0,8"/>
+                                   Foreground="Orange" TextWrapping="Wrap" FontSize="14" Margin="0,0,0,8"/>
                         <TextBlock Text="{Binding ChallengeSummaryText}" Style="{StaticResource BaseText}"
-                                   Foreground="Cyan" TextWrapping="Wrap" FontSize="12"/>
+                                   Foreground="Cyan" TextWrapping="Wrap" FontSize="14"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
@@ -272,12 +275,12 @@
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0" Margin="0,0,0,8">
-                    <TextBlock Text="REAL-TIME PEDAL WAVEFORMS" Style="{StaticResource HeaderText}" HorizontalAlignment="Left"/>
+                    <TextBlock Text="ペダル操作の推移" Style="{StaticResource HeaderText}" HorizontalAlignment="Left"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="■ Brake" Foreground="OrangeRed" FontFamily="Consolas" FontSize="12" Margin="0,0,12,0"/>
-                        <TextBlock Text="■ Throttle" Foreground="LimeGreen" FontFamily="Consolas" FontSize="12" Margin="0,0,12,0"/>
-                        <TextBlock Text="-- Target Brake" Foreground="Yellow" FontFamily="Consolas" FontSize="12" Margin="0,0,12,0"/>
-                        <TextBlock Text="·· 手本波形" Foreground="Gray" FontFamily="Consolas" FontSize="12"/>
+                        <TextBlock Text="■ ブレーキ" Foreground="OrangeRed" FontFamily="Consolas" FontSize="14" Margin="0,0,12,0"/>
+                        <TextBlock Text="■ アクセル" Foreground="LimeGreen" FontFamily="Consolas" FontSize="14" Margin="0,0,12,0"/>
+                        <TextBlock Text="-- 目標ブレーキ" Foreground="Yellow" FontFamily="Consolas" FontSize="14" Margin="0,0,12,0"/>
+                        <TextBlock Text="·· 手本波形" Foreground="Gray" FontFamily="Consolas" FontSize="14"/>
                     </StackPanel>
                 </Grid>
 

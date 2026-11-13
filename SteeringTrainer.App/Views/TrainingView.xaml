@@ -11,12 +11,30 @@
         </Grid.ColumnDefinitions>
 
         <!-- 左ペイン: コントロール -->
-        <StackPanel Grid.Column="0" Margin="0,0,12,0">
+        <ScrollViewer Grid.Column="0" Margin="0,0,12,0" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="目標の速さでハンドルを回そう" Style="{StaticResource HeaderText}" TextWrapping="Wrap" Margin="0,0,0,6"/>
+            <TextBlock Text="目標と現在の速さを比べながら、左右に操作します。" Style="{StaticResource BaseText}" TextWrapping="Wrap" Margin="0,0,0,12"/>
+            <!-- 操作ボタン -->
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="{Binding StartStopText}" Style="{StaticResource PrimaryButton}"
+                        Command="{Binding StartCommand}" Margin="0,0,4,0"
+                        IsEnabled="{Binding IsRunning, Converter={x:Static converters:BoolInverterConverter.Instance}}"/>
+                <Button Grid.Column="1" Content="停止" Style="{StaticResource SecondaryButton}"
+                        Command="{Binding StopCommand}" Margin="4,0,0,0"/>
+            </Grid>
+
+            <Button Content="CSV エクスポート" Style="{StaticResource SecondaryButton}"
+                    Command="{Binding ExportCsvCommand}"/>
 
             <!-- 現在値 -->
             <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
                 <StackPanel>
-                    <TextBlock Text="CURRENT INPUT" Style="{StaticResource HeaderText}" Margin="0,0,0,8"/>
+                    <TextBlock Text="現在の入力" Style="{StaticResource HeaderText}" Margin="0,0,0,8"/>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -29,13 +47,13 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Angle" Style="{StaticResource LabelText}" Margin="0,4"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="角度" Style="{StaticResource LabelText}" Margin="0,4"/>
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CurrentAngleText}" Style="{StaticResource ValueText}" Margin="0,4"/>
 
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Velocity" Style="{StaticResource LabelText}" Margin="0,4"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="角速度" Style="{StaticResource LabelText}" Margin="0,4"/>
                         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CurrentVelocityText}" Style="{StaticResource ValueText}" Foreground="LimeGreen" Margin="0,4"/>
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Acceleration" Style="{StaticResource LabelText}" Margin="0,4"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="角加速度" Style="{StaticResource LabelText}" Margin="0,4"/>
                         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding CurrentAccelerationText}" Style="{StaticResource ValueText}" Foreground="OrangeRed" Margin="0,4"/>
                     </Grid>
                 </StackPanel>
@@ -44,14 +62,14 @@
             <!-- 目標設定 -->
             <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
                 <StackPanel>
-                    <TextBlock Text="TRAINING CONFIG" Style="{StaticResource HeaderText}" Margin="0,0,0,8"/>
+                    <TextBlock Text="練習の設定" Style="{StaticResource HeaderText}" Margin="0,0,0,8"/>
 
-                    <TextBlock Text="Preset" Style="{StaticResource LabelText}" Margin="0,4,0,2"/>
+                    <TextBlock Text="プリセット" Style="{StaticResource LabelText}" Margin="0,4,0,2"/>
                     <ComboBox ItemsSource="{Binding Presets}"
                               SelectedIndex="{Binding SelectedPresetIndex}"
                               Margin="0,0,0,8"/>
 
-                    <TextBlock Text="Lock Angle" Style="{StaticResource LabelText}" Margin="0,4,0,2"/>
+                    <TextBlock Text="最大舵角" Style="{StaticResource LabelText}" Margin="0,4,0,2"/>
                     <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -64,7 +82,7 @@
                                    HorizontalAlignment="Right"/>
                     </Grid>
 
-                    <TextBlock Text="Time per Side" Style="{StaticResource LabelText}" Margin="0,4,0,2"/>
+                    <TextBlock Text="片側にかける時間" Style="{StaticResource LabelText}" Margin="0,4,0,2"/>
                     <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -78,7 +96,7 @@
                     </Grid>
 
                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                        <TextBlock Text="Target Velocity:" Style="{StaticResource LabelText}"/>
+                        <TextBlock Text="目標角速度:" Style="{StaticResource LabelText}"/>
                         <TextBlock Text="{Binding TargetVelocityText}" Style="{StaticResource BaseText}"
                                    FontSize="14" FontWeight="Bold" Foreground="Cyan" Margin="8,0,0,0"/>
                     </StackPanel>
@@ -88,7 +106,7 @@
             <!-- 評価 -->
             <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
                 <StackPanel>
-                    <TextBlock Text="REAL-TIME VERDICT" Style="{StaticResource HeaderText}" Margin="0,0,0,6"/>
+                    <TextBlock Text="現在の判定" Style="{StaticResource HeaderText}" Margin="0,0,0,6"/>
 
                     <!-- GOOD/WARNING/MISS -->
                     <TextBlock Text="{Binding VerdictText}"
@@ -102,26 +120,13 @@
                                  Foreground="{Binding VerdictBrush}"
                                  Background="{StaticResource PrimaryBrush}"
                                  BorderThickness="0" Margin="0,6"/>
-                    <TextBlock Text="Velocity vs Target" Style="{StaticResource LabelText}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="目標に対する速さ" Style="{StaticResource LabelText}" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Border>
 
-            <!-- 操作ボタン -->
-            <Grid Margin="0,0,0,8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="{Binding StartStopText}" Style="{StaticResource PrimaryButton}"
-                        Command="{Binding StartCommand}" Margin="0,0,4,0"
-                        IsEnabled="{Binding IsRunning, Converter={x:Static converters:BoolInverterConverter.Instance}}"/>
-                <Button Grid.Column="1" Content="STOP" Style="{StaticResource SecondaryButton}"
-                        Command="{Binding StopCommand}" Margin="4,0,0,0"/>
-            </Grid>
 
-            <Button Content="CSV エクスポート" Style="{StaticResource SecondaryButton}"
-                    Command="{Binding ExportCsvCommand}"/>
         </StackPanel>
+        </ScrollViewer>
 
         <!-- 右ペイン: 角度インジケータと平滑化角加速度グラフ -->
         <Border Grid.Column="1" Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="24">
@@ -133,7 +138,7 @@
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="STEERING POSITION" Style="{StaticResource HeaderText}"
+                <TextBlock Grid.Row="0" Text="ハンドルの位置" Style="{StaticResource HeaderText}"
                            HorizontalAlignment="Center" Margin="0,0,0,16"/>
 
                 <!-- ステアリング角度バー -->
@@ -164,12 +169,12 @@
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
                     <StackPanel Margin="12,0">
-                        <TextBlock Text="Target" Style="{StaticResource LabelText}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="目標" Style="{StaticResource LabelText}" HorizontalAlignment="Center"/>
                         <TextBlock Text="{Binding TargetVelocityText}" Style="{StaticResource BaseText}"
                                    FontSize="16" Foreground="Cyan" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Margin="12,0">
-                        <TextBlock Text="Actual" Style="{StaticResource LabelText}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="現在" Style="{StaticResource LabelText}" HorizontalAlignment="Center"/>
                         <TextBlock Text="{Binding CurrentVelocityText}" Style="{StaticResource BaseText}"
                                    FontSize="16" Foreground="LimeGreen" HorizontalAlignment="Center"/>
                     </StackPanel>
