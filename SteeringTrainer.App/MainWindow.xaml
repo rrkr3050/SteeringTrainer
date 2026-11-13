@@ -16,10 +16,10 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>  <!-- タイトルバー -->
-            <RowDefinition Height="40"/>  <!-- デバイスステータスバー -->
+            <RowDefinition Height="58"/>  <!-- タイトルバー -->
+            <RowDefinition Height="44"/>  <!-- デバイスステータスバー -->
             <RowDefinition Height="*"/>   <!-- メインコンテンツ -->
-            <RowDefinition Height="30"/>  <!-- ステータスバー -->
+            <RowDefinition Height="34"/>  <!-- ステータスバー -->
         </Grid.RowDefinitions>
 
         <!-- タイトルバー -->
@@ -29,12 +29,16 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="STEERING TRAINER" Style="{StaticResource BaseText}"
-                           FontSize="18" FontWeight="Bold"
-                           Foreground="White" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="{StaticResource AccentBrush}" Width="5" Height="26" CornerRadius="2" Margin="0,0,12,0"/>
+                    <StackPanel>
+                        <TextBlock Text="STEERING TRAINER" Style="{StaticResource BaseText}" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Text="DRIVING PRACTICE" Style="{StaticResource LabelText}" FontSize="10"/>
+                    </StackPanel>
+                </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <CheckBox Content="常に最前面" Foreground="{StaticResource TextSecondaryBrush}"
-                              FontFamily="Consolas" FontSize="12"
+                              FontFamily="Yu Gothic UI" FontSize="12"
                               IsChecked="{Binding AlwaysOnTop}"/>
                 </StackPanel>
             </Grid>
@@ -50,7 +54,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="DEVICE:" Style="{StaticResource LabelText}" Margin="0,0,8,0"/>
+                <TextBlock Grid.Column="0" Text="接続デバイス" Style="{StaticResource LabelText}" Margin="0,0,8,0"/>
                 <TextBlock Grid.Column="1" Text="{Binding DeviceName}" Style="{StaticResource BaseText}"
                            FontSize="13" Margin="0,0,20,0"/>
                 <TextBlock Grid.Column="2" Text="{Binding ConnectionStatusText}"
@@ -90,7 +94,7 @@
         </TabControl>
 
         <!-- ステータスバー -->
-        <Border Grid.Row="3" Background="#FF0A0A1A" Padding="16,0">
+        <Border Grid.Row="3" Background="#FF0B1520" Padding="16,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

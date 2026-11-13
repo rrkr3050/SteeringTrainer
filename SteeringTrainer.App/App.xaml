@@ -5,12 +5,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <!-- カラーパレット -->
-            <Color x:Key="BackgroundColor">#FF1A1A2E</Color>
-            <Color x:Key="SurfaceColor">#FF16213E</Color>
-            <Color x:Key="PrimaryColor">#FF0F3460</Color>
-            <Color x:Key="AccentColor">#FFE94560</Color>
-            <Color x:Key="TextPrimaryColor">#FFE0E0E0</Color>
-            <Color x:Key="TextSecondaryColor">#FF9E9E9E</Color>
+            <Color x:Key="BackgroundColor">#FF101B29</Color>
+            <Color x:Key="SurfaceColor">#FF1A2B3D</Color>
+            <Color x:Key="PrimaryColor">#FF25445D</Color>
+            <Color x:Key="AccentColor">#FFEF6C45</Color>
+            <Color x:Key="TextPrimaryColor">#FFF1F5F8</Color>
+            <Color x:Key="TextSecondaryColor">#FFB9C9D5</Color>
             <Color x:Key="GoodColor">#FF4CAF50</Color>
             <Color x:Key="WarningColor">#FFFFC107</Color>
             <Color x:Key="MissColor">#FFF44336</Color>
@@ -28,12 +28,12 @@
             <!-- ベーステキストスタイル -->
             <Style x:Key="BaseText" TargetType="TextBlock">
                 <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
-                <Setter Property="FontFamily" Value="Consolas"/>
+                <Setter Property="FontFamily" Value="Yu Gothic UI"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
             <Style x:Key="LabelText" BasedOn="{StaticResource BaseText}" TargetType="TextBlock">
                 <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
-                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontSize" Value="13"/>
             </Style>
             <Style x:Key="ValueText" BasedOn="{StaticResource BaseText}" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="20"/>
@@ -44,7 +44,7 @@
                 <Setter Property="FontWeight" Value="Bold"/>
             </Style>
             <Style x:Key="HeaderText" BasedOn="{StaticResource BaseText}" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontSize" Value="17"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
             </Style>
@@ -53,7 +53,7 @@
             <Style x:Key="PrimaryButton" TargetType="Button">
                 <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
                 <Setter Property="Foreground" Value="White"/>
-                <Setter Property="FontFamily" Value="Consolas"/>
+                <Setter Property="FontFamily" Value="Yu Gothic UI"/>
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontWeight" Value="Bold"/>
                 <Setter Property="Padding" Value="20,10"/>
@@ -69,10 +69,10 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#FFD43651"/>
+                                    <Setter Property="Background" Value="#FFD95A36"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Background" Value="#FFB02040"/>
+                                    <Setter Property="Background" Value="#FFB64528"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -92,7 +92,7 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#FF1A4A80"/>
+                                    <Setter Property="Background" Value="#FF345B77"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -104,15 +104,15 @@
             <Style TargetType="TabItem">
                 <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
-                <Setter Property="FontFamily" Value="Consolas"/>
+                <Setter Property="FontFamily" Value="Yu Gothic UI"/>
                 <Setter Property="FontSize" Value="13"/>
-                <Setter Property="Padding" Value="16,8"/>
+                <Setter Property="Padding" Value="16,12"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="TabItem">
                             <Border x:Name="Border" Background="{StaticResource SurfaceBrush}"
-                                    BorderThickness="0,0,0,2"
+                                    BorderThickness="0,0,0,3"
                                     BorderBrush="Transparent"
                                     Padding="{TemplateBinding Padding}">
                                 <ContentPresenter ContentSource="Header"
@@ -124,6 +124,7 @@
                                     <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="{StaticResource PrimaryBrush}"/>
                                     <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
@@ -141,7 +142,7 @@
             <Style TargetType="ComboBox">
                 <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
-                <Setter Property="FontFamily" Value="Consolas"/>
+                <Setter Property="FontFamily" Value="Yu Gothic UI"/>
                 <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
             </Style>
             <Style TargetType="ComboBoxItem">
@@ -170,7 +171,7 @@
                 <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
                 <Setter Property="BorderBrush" Value="#FF3A506B"/>
-                <Setter Property="FontFamily" Value="Consolas"/>
+                <Setter Property="FontFamily" Value="Yu Gothic UI"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                 <Setter Property="Padding" Value="6,3"/>
                 <Setter Property="CaretBrush" Value="{StaticResource TextPrimaryBrush}"/>
