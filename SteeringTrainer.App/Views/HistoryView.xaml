@@ -1,0 +1,154 @@
+<UserControl x:Class="SteeringTrainer.App.Views.HistoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource BackgroundBrush}">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ヘッダーと更新ボタン -->
+        <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16,12" Margin="0,0,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="PRACTICE HISTORY (SQLite)" Style="{StaticResource HeaderText}" Margin="0,0,0,4"/>
+                    <TextBlock Text="過去のセッション結果と評価ログ" Style="{StaticResource LabelText}"/>
+                </StackPanel>
+                <Button Grid.Column="1" Content="履歴を再読込" Style="{StaticResource SecondaryButton}"
+                        Command="{Binding RefreshCommand}" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- メインタブ: アクセル波形追従 / ヒール＆トゥ -->
+        <TabControl Grid.Row="1">
+            <!-- タブ1: アクセル波形追従履歴 -->
+            <TabItem Header="アクセル波形追従">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" CornerRadius="4" Padding="12,8" Margin="0,0,0,8">
+                        <TextBlock Text="{Binding TrackingSummary}" Style="{StaticResource BaseText}"
+                                   FontWeight="Bold" Foreground="Cyan"/>
+                    </Border>
+
+                    <Border Grid.Row="1" Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="4">
+                        <DataGrid ItemsSource="{Binding TrackingHistoryList}" AutoGenerateColumns="False"
+                                  IsReadOnly="True" CanUserAddRows="False"
+                                  Background="Transparent" RowBackground="#FF16213E" AlternatingRowBackground="#FF1A1A2E"
+                                  Foreground="White" FontFamily="Consolas" FontSize="12"
+                                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF0F3460"
+                                  HeadersVisibility="Column" BorderThickness="0">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+                                    <Setter Property="FontFamily" Value="Consolas"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Padding" Value="8,6"/>
+                                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                    <Setter Property="BorderBrush" Value="#FF16213E"/>
+                                </Style>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="6,4"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#FF1A4A80"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="45"/>
+                                <DataGridTextColumn Header="日時 (UTC)" Binding="{Binding RecordedAtUtc, StringFormat={}{0:MM-dd HH:mm}}" Width="100"/>
+                                <DataGridTextColumn Header="判定" Binding="{Binding Grade}" Width="80"/>
+                                <DataGridTextColumn Header="総合点" Binding="{Binding TotalScore, StringFormat={}{0:F1}}" Width="65"/>
+                                <DataGridTextColumn Header="波形(40)" Binding="{Binding WaveformScore, StringFormat={}{0:F1}}" Width="70"/>
+                                <DataGridTextColumn Header="位相(30)" Binding="{Binding PhaseScore, StringFormat={}{0:F1}}" Width="70"/>
+                                <DataGridTextColumn Header="位相差(s)" Binding="{Binding PhaseLagSeconds, StringFormat={}{0:F2}}" Width="75"/>
+                                <DataGridTextColumn Header="ブレーキ(30)" Binding="{Binding BrakeStabilityScore, StringFormat={}{0:F1}}" Width="85"/>
+                                <DataGridTextColumn Header="追従率(%)" Binding="{Binding ThrottleInToleranceRatio, StringFormat={}{0:F1}}" Width="75"/>
+                                <DataGridTextColumn Header="維持率(%)" Binding="{Binding BrakeInToleranceRatio, StringFormat={}{0:F1}}" Width="75"/>
+                                <DataGridTextColumn Header="同時率(%)" Binding="{Binding BothInToleranceRatio, StringFormat={}{0:F1}}" Width="75"/>
+                                <DataGridTextColumn Header="踏み誤差(%)" Binding="{Binding RisingMeanError, StringFormat={}{0:F1}}" Width="85"/>
+                                <DataGridTextColumn Header="戻し誤差(%)" Binding="{Binding FallingMeanError, StringFormat={}{0:F1}}" Width="85"/>
+                                <DataGridTextColumn Header="目標Brk" Binding="{Binding TargetBrake, StringFormat={}{0:F0}%}" Width="65"/>
+                                <DataGridTextColumn Header="速度(BPM)" Binding="{Binding Bpm, StringFormat={}{0:F0} BPM}" Width="75"/>
+                                <DataGridTextColumn Header="周期(s)" Binding="{Binding CycleDuration, StringFormat={}{0:F2}s}" Width="65"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- タブ2: ヒール＆トゥ履歴 -->
+            <TabItem Header="ヒール＆トゥ">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" CornerRadius="4" Padding="12,8" Margin="0,0,0,8">
+                        <TextBlock Text="{Binding HeelToeSummary}" Style="{StaticResource BaseText}"
+                                   FontWeight="Bold" Foreground="Yellow"/>
+                    </Border>
+
+                    <Border Grid.Row="1" Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="4">
+                        <DataGrid ItemsSource="{Binding HeelToeHistoryList}" AutoGenerateColumns="False"
+                                  IsReadOnly="True" CanUserAddRows="False"
+                                  Background="Transparent" RowBackground="#FF16213E" AlternatingRowBackground="#FF1A1A2E"
+                                  Foreground="White" FontFamily="Consolas" FontSize="12"
+                                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF0F3460"
+                                  HeadersVisibility="Column" BorderThickness="0">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+                                    <Setter Property="FontFamily" Value="Consolas"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Padding" Value="8,6"/>
+                                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                    <Setter Property="BorderBrush" Value="#FF16213E"/>
+                                </Style>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="6,4"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#FF1A4A80"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                                <DataGridTextColumn Header="日時 (UTC)" Binding="{Binding RecordedAtUtc, StringFormat={}{0:MM-dd HH:mm}}" Width="110"/>
+                                <DataGridTextColumn Header="判定" Binding="{Binding Grade}" Width="90"/>
+                                <DataGridTextColumn Header="総合点" Binding="{Binding Score, StringFormat={}{0:F1}}" Width="70"/>
+                                <DataGridTextColumn Header="目標Brk" Binding="{Binding TargetBrake, StringFormat={}{0:F0}%}" Width="75"/>
+                                <DataGridTextColumn Header="目標Thr" Binding="{Binding TargetThrottle, StringFormat={}{0:F0}%}" Width="75"/>
+                                <DataGridTextColumn Header="安定性" Binding="{Binding BrakeStabilityScore, StringFormat={}{0:F1}}" Width="75"/>
+                                <DataGridTextColumn Header="タイミング" Binding="{Binding TimingScore, StringFormat={}{0:F1}}" Width="85"/>
+                                <DataGridTextColumn Header="量精度" Binding="{Binding AmountScore, StringFormat={}{0:F1}}" Width="75"/>
+                                <DataGridCheckBoxColumn Header="チャレンジ" Binding="{Binding IsChallenge}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

@@ -1,0 +1,8 @@
+**/bin/
+**/obj/
+.vs/
+*.user
+*.log
+native/open-engine-sim/
+native/build-tools/
+.forge-usage-*.json

@@ -1,0 +1,106 @@
+<Window x:Class="SteeringTrainer.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:SteeringTrainer.App.ViewModels"
+        xmlns:views="clr-namespace:SteeringTrainer.App.Views"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        mc:Ignorable="d"
+        Title="Steering Trainer"
+        Width="1200" Height="780"
+        MinWidth="900" MinHeight="600"
+        Background="{StaticResource BackgroundBrush}"
+        WindowStartupLocation="CenterScreen"
+        Topmost="{Binding AlwaysOnTop}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>  <!-- タイトルバー -->
+            <RowDefinition Height="40"/>  <!-- デバイスステータスバー -->
+            <RowDefinition Height="*"/>   <!-- メインコンテンツ -->
+            <RowDefinition Height="30"/>  <!-- ステータスバー -->
+        </Grid.RowDefinitions>
+
+        <!-- タイトルバー -->
+        <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" Padding="16,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="STEERING TRAINER" Style="{StaticResource BaseText}"
+                           FontSize="18" FontWeight="Bold"
+                           Foreground="White" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <CheckBox Content="常に最前面" Foreground="{StaticResource TextSecondaryBrush}"
+                              FontFamily="Consolas" FontSize="12"
+                              IsChecked="{Binding AlwaysOnTop}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- デバイスステータスバー -->
+        <Border Grid.Row="1" Background="{StaticResource SurfaceBrush}" Padding="16,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="DEVICE:" Style="{StaticResource LabelText}" Margin="0,0,8,0"/>
+                <TextBlock Grid.Column="1" Text="{Binding DeviceName}" Style="{StaticResource BaseText}"
+                           FontSize="13" Margin="0,0,20,0"/>
+                <TextBlock Grid.Column="2" Text="{Binding ConnectionStatusText}"
+                           Style="{StaticResource BaseText}" FontSize="12"
+                           Foreground="{Binding ConnectionStatusBrush}"/>
+                <TextBlock Grid.Column="4" Text="{Binding SamplingRateText}"
+                           Style="{StaticResource LabelText}" Margin="0,0,8,0"/>
+            </Grid>
+        </Border>
+
+        <!-- メインコンテンツ (タブ) -->
+        <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTabIndex}">
+            <!-- F1: メイン練習画面 -->
+            <TabItem Header="[F1] LOCK TO LOCK">
+                <views:TrainingView DataContext="{Binding TrainingViewModel}"/>
+            </TabItem>
+
+            <!-- F2: ヒール＆トゥ練習画面 -->
+            <TabItem Header="[F2] HEEL &amp; TOE">
+                <views:HeelToeView DataContext="{Binding HeelToeViewModel}"/>
+            </TabItem>
+
+            <!-- F3: アクセル波形追従練習画面 -->
+            <TabItem Header="[F3] THROTTLE TRACKING">
+                <views:ThrottleTrackingView DataContext="{Binding ThrottleTrackingViewModel}"/>
+            </TabItem>
+
+            <!-- F4: 履歴画面 -->
+            <TabItem Header="[F4] HISTORY">
+                <views:HistoryView DataContext="{Binding HistoryViewModel}"/>
+            </TabItem>
+
+            <!-- F5: 設定画面 -->
+            <TabItem Header="[F5] SETTINGS">
+                <views:SettingsView DataContext="{Binding SettingsViewModel}"/>
+            </TabItem>
+        </TabControl>
+
+        <!-- ステータスバー -->
+        <Border Grid.Row="3" Background="#FF0A0A1A" Padding="16,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding StatusMessage}"
+                           Style="{StaticResource LabelText}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="Space/ハンコンボタン=開始/停止  Esc=停止  F1-F5=タブ切替"
+                           Style="{StaticResource LabelText}" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
