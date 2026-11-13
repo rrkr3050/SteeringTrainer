@@ -13,8 +13,9 @@
         </Grid.ColumnDefinitions>
 
         <!-- 左ペイン: コントロール & 判定 -->
-        <ScrollViewer Grid.Column="0" Margin="0,0,12,0" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+        <Grid Grid.Column="0" Margin="0,0,12,0">
+          <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+          <StackPanel Grid.Row="0">
                 <TextBlock Text="ブレーキを保ち、アクセルを合わせよう" Style="{StaticResource HeaderText}" TextWrapping="Wrap" Margin="0,0,0,6"/>
                 <TextBlock Text="目標のブレーキ量を維持しながら、アクセルを目標まで踏みます。" Style="{StaticResource BaseText}" TextWrapping="Wrap" Margin="0,0,0,12"/>
                 <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
@@ -29,6 +30,27 @@
                                     IsEnabled="{Binding IsRunning, Converter={x:Static converters:BoolInverterConverter.Instance}}"/>
                         </Grid>
                         <Button Content="停止" Style="{StaticResource SecondaryButton}" Command="{Binding StopCommand}"/>
+                    </StackPanel>
+                </Border>
+          </StackPanel>
+          <Border Grid.Row="1" Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="8" Margin="0,0,0,8">
+            <StackPanel>
+                        <TextBlock Text="{Binding StatusHeader}"
+                                   Foreground="{Binding StatusBrush}"
+                                   FontFamily="Consolas" FontSize="30" FontWeight="Bold"
+                                   HorizontalAlignment="Center" Margin="0,4"/>
+
+                        <TextBlock Text="{Binding StatusSubText}"
+                                   Style="{StaticResource BaseText}" FontSize="13"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,4,0,8"/>
+
+            </StackPanel>
+          </Border>
+          <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="12" Margin="0,0,0,12">
+                    <StackPanel>
                         <Button Content="{Binding StartBrakeHoldButtonText}" Style="{StaticResource SecondaryButton}"
                                 Command="{Binding StartBrakeHoldCommand}" Margin="0,8,0,0"/>
                         <TextBlock Text="{Binding HoldProgressText}" Style="{StaticResource LabelText}"
@@ -48,16 +70,6 @@
                                    Foreground="Cyan" HorizontalAlignment="Center" Margin="0,0,0,4"/>
                         <TextBlock Text="{Binding ConsecutiveAverageText}" Style="{StaticResource ValueText}"
                                    Foreground="Cyan" HorizontalAlignment="Center" Margin="0,4,0,8"/>
-
-                        <TextBlock Text="{Binding StatusHeader}"
-                                   Foreground="{Binding StatusBrush}"
-                                   FontFamily="Consolas" FontSize="30" FontWeight="Bold"
-                                   HorizontalAlignment="Center" Margin="0,4"/>
-
-                        <TextBlock Text="{Binding StatusSubText}"
-                                   Style="{StaticResource BaseText}" FontSize="13"
-                                   Foreground="{StaticResource TextPrimaryBrush}"
-                                   TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,4,0,8"/>
 
                         <!-- スコア内訳 -->
                         <Grid Margin="0,8,0,4">
@@ -265,6 +277,7 @@
                 </Border>
             </StackPanel>
         </ScrollViewer>
+        </Grid>
 
         <!-- 右ペイン: リアルタイム波形プロット -->
         <Border Grid.Column="1" Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16">

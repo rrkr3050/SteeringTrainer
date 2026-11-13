@@ -11,8 +11,9 @@
         </Grid.ColumnDefinitions>
 
         <!-- 左ペイン: コントロール -->
-        <ScrollViewer Grid.Column="0" Margin="0,0,12,0" VerticalScrollBarVisibility="Auto">
-        <StackPanel>
+        <Grid Grid.Column="0" Margin="0,0,12,0">
+        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
             <TextBlock Text="目標の速さでハンドルを回そう" Style="{StaticResource HeaderText}" TextWrapping="Wrap" Margin="0,0,0,6"/>
             <TextBlock Text="目標と現在の速さを比べながら、左右に操作します。" Style="{StaticResource BaseText}" TextWrapping="Wrap" Margin="0,0,0,12"/>
             <!-- 操作ボタン -->
@@ -28,9 +29,34 @@
                         Command="{Binding StopCommand}" Margin="4,0,0,0"/>
             </Grid>
 
+
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <!-- 評価 -->
+            <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="現在の判定" Style="{StaticResource HeaderText}" Margin="0,0,0,6"/>
+
+                    <!-- GOOD/WARNING/MISS -->
+                    <TextBlock Text="{Binding VerdictText}"
+                               Foreground="{Binding VerdictBrush}"
+                               FontFamily="Consolas" FontSize="32" FontWeight="Bold"
+                               HorizontalAlignment="Center" Margin="0,4"/>
+
+                    <!-- 角速度ゲージ -->
+                    <ProgressBar Height="20" Maximum="1.5"
+                                 Value="{Binding VelocityGaugeValue, Mode=OneWay}"
+                                 Foreground="{Binding VerdictBrush}"
+                                 Background="{StaticResource PrimaryBrush}"
+                                 BorderThickness="0" Margin="0,6"/>
+                    <TextBlock Text="目標に対する速さ" Style="{StaticResource LabelText}" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
             <Button Content="CSV エクスポート" Style="{StaticResource SecondaryButton}"
                     Command="{Binding ExportCsvCommand}"/>
-
             <!-- 現在値 -->
             <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
                 <StackPanel>
@@ -103,30 +129,12 @@
                 </StackPanel>
             </Border>
 
-            <!-- 評価 -->
-            <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="16" Margin="0,0,0,12">
-                <StackPanel>
-                    <TextBlock Text="現在の判定" Style="{StaticResource HeaderText}" Margin="0,0,0,6"/>
 
-                    <!-- GOOD/WARNING/MISS -->
-                    <TextBlock Text="{Binding VerdictText}"
-                               Foreground="{Binding VerdictBrush}"
-                               FontFamily="Consolas" FontSize="32" FontWeight="Bold"
-                               HorizontalAlignment="Center" Margin="0,4"/>
-
-                    <!-- 角速度ゲージ -->
-                    <ProgressBar Height="20" Maximum="1.5"
-                                 Value="{Binding VelocityGaugeValue, Mode=OneWay}"
-                                 Foreground="{Binding VerdictBrush}"
-                                 Background="{StaticResource PrimaryBrush}"
-                                 BorderThickness="0" Margin="0,6"/>
-                    <TextBlock Text="目標に対する速さ" Style="{StaticResource LabelText}" HorizontalAlignment="Center"/>
-                </StackPanel>
-            </Border>
 
 
         </StackPanel>
         </ScrollViewer>
+        </Grid>
 
         <!-- 右ペイン: 角度インジケータと平滑化角加速度グラフ -->
         <Border Grid.Column="1" Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="24">
